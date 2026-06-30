@@ -21,13 +21,13 @@
   <header class="hero">
     <div class="hero-inner">
       <h1>10分セットメーカー</h1>
-      <p>再生リストに挟む10分の動画セットを作成！</p>
+      <p>再生リストに挟む10分の動画セットを作成できます</p>
     </div>
   </header>
 
   <main class="container">
     <section class="glass-card">
-      <h2>動画を追加</h2>
+      <h2 class="section-title">動画を追加</h2>
 
       <div class="tab-buttons">
         <button id="searchTab" class="tab-button active">検索</button>
@@ -52,7 +52,7 @@
 
     <section class="glass-card">
       <div class="section-header">
-        <h2>候補動画</h2>
+        <h2 class="section-title">使う動画にチェック</h2>
         <div class="candidate-buttons">
           <button id="checkAll">全てチェック</button>
           <button id="uncheckAll">全て解除</button>
@@ -72,8 +72,7 @@
 
     <section class="glass-card">
       <div class="section-header">
-        <h2>生成結果</h2>
-        
+        <h2 class="section-title">あなたの作った10分セット！</h2>
       </div>
 
       <div id="resultList">
@@ -82,6 +81,9 @@
     </section>
   </main>
 
+  <footer>
+    <p>© 10分セットメーカー</p>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
