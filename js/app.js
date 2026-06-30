@@ -17,9 +17,9 @@ const checkAllButton = document.getElementById("checkAll");
 const uncheckAllButton = document.getElementById("uncheckAll");
 
 const generateButton = document.getElementById("generateButton");
-const regenerateButton = document.getElementById("regenerateButton");
-
 const resultList = document.getElementById("resultList");
+
+let currentSearchVideos = [];
 
 renderCandidateList();
 
@@ -27,7 +27,6 @@ const savedSets = loadResultSets();
 
 if (savedSets.length > 0) {
     renderResultList(savedSets);
-    regenerateButton.classList.remove("hidden");
 }
 
 initTabs();
@@ -72,7 +71,6 @@ function initEvents() {
     };
 
     generateButton.onclick = generateAction;
-    regenerateButton.onclick = regenerateAction;
 }
 
 async function searchAction() {
@@ -83,7 +81,8 @@ async function searchAction() {
 
     try {
         const result = await searchYouTube(keyword);
-        renderSearchResults(result);
+        currentSearchVideos = result.map(video => normalizeVideo(video));
+        renderSearchResults(currentSearchVideos);
     } catch (e) {
         alert(e.message);
     }
@@ -112,9 +111,16 @@ async function addUrlAction() {
 function renderSearchResults(videos) {
     searchResults.innerHTML = "";
 
-    videos.forEach(video => {
-        const v = normalizeVideo(video);
+    if (videos.length === 0) {
+        searchResults.innerHTML = `
+            <div class="empty">
+                検索結果がありません
+            </div>
+        `;
+        return;
+    }
 
+    videos.forEach((v, index) => {
         const card = document.createElement("div");
         card.className = "search-item";
 
@@ -131,19 +137,64 @@ function renderSearchResults(videos) {
                     <span class="search-duration">${v.duration}</span>
                 </div>
 
-                <button type="button">追加</button>
+                <div class="search-bottom">
+                    <input
+                        type="checkbox"
+                        class="search-select"
+                        data-index="${index}"
+                    >
+
+                    <button type="button" class="single-add-button">
+                        追加
+                    </button>
+                </div>
             </div>
         `;
 
-        card.querySelector("button").onclick = () => {
+        card.querySelector(".single-add-button").onclick = () => {
             addVideo(v);
             renderCandidateList();
-            searchResults.innerHTML = "";
-            searchInput.value = "";
+            closeSearchResults();
         };
 
         searchResults.appendChild(card);
     });
+
+    const addSelectedButton = document.createElement("button");
+    addSelectedButton.type = "button";
+    addSelectedButton.className = "search-add-selected";
+    addSelectedButton.textContent = "選択した動画を追加";
+
+    addSelectedButton.onclick = addSelectedSearchVideos;
+
+    searchResults.appendChild(addSelectedButton);
+}
+
+function addSelectedSearchVideos() {
+    const checkedBoxes = document.querySelectorAll(".search-select:checked");
+
+    if (checkedBoxes.length === 0) {
+        alert("追加する動画を選択してください");
+        return;
+    }
+
+    checkedBoxes.forEach(box => {
+        const index = Number(box.dataset.index);
+        const video = currentSearchVideos[index];
+
+        if (video) {
+            addVideo(video);
+        }
+    });
+
+    renderCandidateList();
+    closeSearchResults();
+}
+
+function closeSearchResults() {
+    searchResults.innerHTML = "";
+    searchInput.value = "";
+    currentSearchVideos = [];
 }
 
 function renderCandidateList() {
@@ -213,21 +264,6 @@ async function generateAction() {
     await new Promise(resolve => requestAnimationFrame(resolve));
 
     const sets = generateSets();
-
-    renderResultList(sets);
-    saveResultSets(sets);
-
-    regenerateButton.classList.remove("hidden");
-
-    hideLoading();
-}
-
-async function regenerateAction() {
-    showLoading();
-
-    await new Promise(resolve => requestAnimationFrame(resolve));
-
-    const sets = regenerateSets();
 
     renderResultList(sets);
     saveResultSets(sets);
