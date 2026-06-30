@@ -37,7 +37,6 @@ function initTabs() {
     searchTab.onclick = () => {
         searchTab.classList.add("active");
         urlTab.classList.remove("active");
-
         searchArea.classList.remove("hidden");
         urlArea.classList.add("hidden");
     };
@@ -45,7 +44,6 @@ function initTabs() {
     urlTab.onclick = () => {
         urlTab.classList.add("active");
         searchTab.classList.remove("active");
-
         urlArea.classList.remove("hidden");
         searchArea.classList.add("hidden");
     };
@@ -101,10 +99,8 @@ async function addUrlAction() {
 
     try {
         const video = await getVideoFromUrl(url);
-
         addVideo(normalizeVideo(video));
         renderCandidateList();
-
         urlInput.value = "";
     } catch (e) {
         alert(e.message);
@@ -129,8 +125,12 @@ function renderSearchResults(videos) {
 
             <div class="search-content">
                 <div class="search-title">${escapeHtml(v.title)}</div>
-                <div class="search-channel">${escapeHtml(v.channel)}</div>
-                <div class="search-duration">${v.duration}</div>
+
+                <div class="search-meta">
+                    <span class="search-channel">${escapeHtml(v.channel)}</span>
+                    <span class="search-duration">${v.duration}</span>
+                </div>
+
                 <button type="button">追加</button>
             </div>
         `;
@@ -138,7 +138,6 @@ function renderSearchResults(videos) {
         card.querySelector("button").onclick = () => {
             addVideo(v);
             renderCandidateList();
-
             searchResults.innerHTML = "";
             searchInput.value = "";
         };
@@ -177,8 +176,11 @@ function createCandidateCard(video) {
 
         <div class="candidate-content">
             <div class="candidate-title">${escapeHtml(video.title)}</div>
-            <div class="candidate-channel">${escapeHtml(video.channel)}</div>
-            <div class="candidate-duration">${video.duration}</div>
+
+            <div class="candidate-meta">
+                <span class="candidate-channel">${escapeHtml(video.channel)}</span>
+                <span class="candidate-duration">${video.duration}</span>
+            </div>
 
             <div class="candidate-bottom">
                 <input
@@ -280,8 +282,11 @@ function createResultCard(set, number) {
 
                 <div class="result-content">
                     <div class="result-title">${escapeHtml(video.title)}</div>
-                    <div class="result-channel">${escapeHtml(video.channel)}</div>
-                    <div class="result-duration">${video.duration}</div>
+
+                    <div class="result-meta">
+                        <span class="result-channel">${escapeHtml(video.channel)}</span>
+                        <span class="result-duration">${video.duration}</span>
+                    </div>
 
                     <a
                         class="result-link"
