@@ -1,7 +1,3 @@
-/* ==========================================
-   Supabase
-========================================== */
-
 const SUPABASE_URL = window.SUPABASE_URL;
 const SUPABASE_KEY = window.SUPABASE_KEY;
 
@@ -9,11 +5,6 @@ const supabaseClient = supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
 );
-
-
-/* ==========================================
-   Save Shared Set
-========================================== */
 
 async function saveSharedSet(videos) {
     const payload = videos.map(video => ({
@@ -39,19 +30,9 @@ async function saveSharedSet(videos) {
     return data.id;
 }
 
-
-/* ==========================================
-   Share URL
-========================================== */
-
 function createShareUrl(id) {
-    return `${location.origin}/share.html?id=${id}`;
+    return `${location.origin}/api/share?id=${id}`;
 }
-
-
-/* ==========================================
-   X Share
-========================================== */
 
 function openXShare(url) {
     const text = "#BandZAI10分セット";
@@ -70,11 +51,6 @@ function openXShare(url) {
     );
 }
 
-
-/* ==========================================
-   Share Set
-========================================== */
-
 async function shareSet(videos) {
     try {
         showLoading();
@@ -87,7 +63,6 @@ async function shareSet(videos) {
         openXShare(url);
     } catch (e) {
         hideLoading();
-
         alert("共有に失敗しました");
         console.error(e);
     }
