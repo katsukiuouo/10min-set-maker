@@ -17,9 +17,9 @@ const checkAllButton = document.getElementById("checkAll");
 const uncheckAllButton = document.getElementById("uncheckAll");
 
 const generateButton = document.getElementById("generateButton");
-const resultList = document.getElementById("resultList");
+const regenerateButton = document.getElementById("regenerateButton");
 
-let currentSearchVideos = [];
+const resultList = document.getElementById("resultList");
 
 renderCandidateList();
 
@@ -27,6 +27,7 @@ const savedSets = loadResultSets();
 
 if (savedSets.length > 0) {
     renderResultList(savedSets);
+    regenerateButton.classList.remove("hidden");
 }
 
 initTabs();
@@ -71,6 +72,7 @@ function initEvents() {
     };
 
     generateButton.onclick = generateAction;
+    regenerateButton.onclick = regenerateAction;
 }
 
 async function searchAction() {
@@ -81,8 +83,7 @@ async function searchAction() {
 
     try {
         const result = await searchYouTube(keyword);
-        currentSearchVideos = result.map(video => normalizeVideo(video));
-        renderSearchResults(currentSearchVideos);
+        renderSearchResults(result);
     } catch (e) {
         alert(e.message);
     }
@@ -111,34 +112,13 @@ async function addUrlAction() {
 function renderSearchResults(videos) {
     searchResults.innerHTML = "";
 
-    if (videos.length === 0) {
-        searchResults.innerHTML = `
-            <div class="empty">
-                検索結果がありません
-            </div>
-        `;
-        return;
-    }
+    videos.forEach(video => {
+        const v = normalizeVideo(video);
 
-    const addSelectedButton = document.createElement("button");
-    addSelectedButton.type = "button";
-    addSelectedButton.className = "search-add-selected";
-    addSelectedButton.textContent = "選択した動画を追加";
-    addSelectedButton.onclick = addSelectedSearchVideos;
-
-    searchResults.appendChild(addSelectedButton);
-
-    videos.forEach((v, index) => {
         const card = document.createElement("div");
         card.className = "search-item";
 
         card.innerHTML = `
-            <input
-                type="checkbox"
-                class="search-select"
-                data-index="${index}"
-            >
-
             <div class="search-thumbnail">
                 <img src="${v.thumbnail}" alt="thumbnail">
             </div>
@@ -150,42 +130,25 @@ function renderSearchResults(videos) {
                     <span class="search-channel">${escapeHtml(v.channel)}</span>
                     <span class="search-duration">${v.duration}</span>
                 </div>
+
+                <button type="button">追加</button>
             </div>
         `;
+
+        card.querySelector("button").onclick = () => {
+            addVideo(v);
+            renderCandidateList();
+            searchResults.innerHTML = "";
+            searchInput.value = "";
+        };
 
         searchResults.appendChild(card);
     });
 }
 
-function addSelectedSearchVideos() {
-    const checkedBoxes = document.querySelectorAll(".search-select:checked");
-
-    if (checkedBoxes.length === 0) {
-        alert("追加する動画を選択してください");
-        return;
-    }
-
-    checkedBoxes.forEach(box => {
-        const index = Number(box.dataset.index);
-        const video = currentSearchVideos[index];
-
-        if (video) {
-            addVideo(video);
-        }
-    });
-
-    renderCandidateList();
-    closeSearchResults();
-}
-
-function closeSearchResults() {
-    searchResults.innerHTML = "";
-    searchInput.value = "";
-    currentSearchVideos = [];
-}
-
 function renderCandidateList() {
     const videos = getAllVideos();
+
     candidateList.innerHTML = "";
 
     if (videos.length === 0) {
@@ -250,6 +213,21 @@ async function generateAction() {
     await new Promise(resolve => requestAnimationFrame(resolve));
 
     const sets = generateSets();
+
+    renderResultList(sets);
+    saveResultSets(sets);
+
+    regenerateButton.classList.remove("hidden");
+
+    hideLoading();
+}
+
+async function regenerateAction() {
+    showLoading();
+
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    const sets = regenerateSets();
 
     renderResultList(sets);
     saveResultSets(sets);
