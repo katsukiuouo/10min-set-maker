@@ -1,7 +1,3 @@
-/* ==========================================
-   DOM
-========================================== */
-
 const searchInput = document.getElementById("searchInput");
 const searchButton = document.getElementById("searchButton");
 const searchResults = document.getElementById("searchResults");
@@ -25,19 +21,17 @@ const regenerateButton = document.getElementById("regenerateButton");
 
 const resultList = document.getElementById("resultList");
 
-
-/* ==========================================
-   Start
-========================================== */
-
 renderCandidateList();
+
+const savedSets = loadResultSets();
+
+if (savedSets.length > 0) {
+    renderResultList(savedSets);
+    regenerateButton.classList.remove("hidden");
+}
+
 initTabs();
 initEvents();
-
-
-/* ==========================================
-   Tabs
-========================================== */
 
 function initTabs() {
     searchTab.onclick = () => {
@@ -56,11 +50,6 @@ function initTabs() {
         searchArea.classList.add("hidden");
     };
 }
-
-
-/* ==========================================
-   Events
-========================================== */
 
 function initEvents() {
     searchButton.onclick = searchAction;
@@ -88,14 +77,8 @@ function initEvents() {
     regenerateButton.onclick = regenerateAction;
 }
 
-
-/* ==========================================
-   Search
-========================================== */
-
 async function searchAction() {
     const keyword = searchInput.value.trim();
-
     if (!keyword) return;
 
     searchButton.disabled = true;
@@ -110,14 +93,8 @@ async function searchAction() {
     searchButton.disabled = false;
 }
 
-
-/* ==========================================
-   URL Add
-========================================== */
-
 async function addUrlAction() {
     const url = urlInput.value.trim();
-
     if (!url) return;
 
     urlButton.disabled = true;
@@ -126,7 +103,6 @@ async function addUrlAction() {
         const video = await getVideoFromUrl(url);
 
         addVideo(normalizeVideo(video));
-
         renderCandidateList();
 
         urlInput.value = "";
@@ -136,11 +112,6 @@ async function addUrlAction() {
 
     urlButton.disabled = false;
 }
-
-
-/* ==========================================
-   Search Result
-========================================== */
 
 function renderSearchResults(videos) {
     searchResults.innerHTML = "";
@@ -157,27 +128,15 @@ function renderSearchResults(videos) {
             </div>
 
             <div class="search-content">
-                <div class="search-title">
-                    ${escapeHtml(v.title)}
-                </div>
-
-                <div class="search-channel">
-                    ${escapeHtml(v.channel)}
-                </div>
-
-                <div class="search-duration">
-                    ${v.duration}
-                </div>
-
-                <button type="button">
-                    追加
-                </button>
+                <div class="search-title">${escapeHtml(v.title)}</div>
+                <div class="search-channel">${escapeHtml(v.channel)}</div>
+                <div class="search-duration">${v.duration}</div>
+                <button type="button">追加</button>
             </div>
         `;
 
         card.querySelector("button").onclick = () => {
             addVideo(v);
-
             renderCandidateList();
 
             searchResults.innerHTML = "";
@@ -187,11 +146,6 @@ function renderSearchResults(videos) {
         searchResults.appendChild(card);
     });
 }
-
-
-/* ==========================================
-   Candidate List
-========================================== */
 
 function renderCandidateList() {
     const videos = getAllVideos();
@@ -204,24 +158,16 @@ function renderCandidateList() {
                 動画を追加するとここに表示されます
             </div>
         `;
-
         return;
     }
 
     videos.forEach(video => {
-        const card = createCandidateCard(video);
-        candidateList.appendChild(card);
+        candidateList.appendChild(createCandidateCard(video));
     });
 }
 
-
-/* ==========================================
-   Candidate Card
-========================================== */
-
 function createCandidateCard(video) {
     const card = document.createElement("div");
-
     card.className = "candidate-item";
 
     card.innerHTML = `
@@ -230,17 +176,9 @@ function createCandidateCard(video) {
         </div>
 
         <div class="candidate-content">
-            <div class="candidate-title">
-                ${escapeHtml(video.title)}
-            </div>
-
-            <div class="candidate-channel">
-                ${escapeHtml(video.channel)}
-            </div>
-
-            <div class="candidate-duration">
-                ${video.duration}
-            </div>
+            <div class="candidate-title">${escapeHtml(video.title)}</div>
+            <div class="candidate-channel">${escapeHtml(video.channel)}</div>
+            <div class="candidate-duration">${video.duration}</div>
 
             <div class="candidate-bottom">
                 <input
@@ -249,26 +187,17 @@ function createCandidateCard(video) {
                     ${video.checked ? "checked" : ""}
                 >
 
-                <button
-                    type="button"
-                    class="delete-button"
-                >
-                    ×
-                </button>
+                <button type="button" class="delete-button">×</button>
             </div>
         </div>
     `;
 
-    const checkbox = card.querySelector(".candidate-check");
-
-    checkbox.onchange = () => {
+    card.querySelector(".candidate-check").onchange = () => {
         toggleVideo(video.id);
         renderCandidateList();
     };
 
-    const removeButton = card.querySelector(".delete-button");
-
-    removeButton.onclick = () => {
+    card.querySelector(".delete-button").onclick = () => {
         removeVideo(video.id);
         renderCandidateList();
     };
@@ -276,46 +205,33 @@ function createCandidateCard(video) {
     return card;
 }
 
-
-/* ==========================================
-   Generate
-========================================== */
-
 async function generateAction() {
     showLoading();
 
-    await new Promise(resolve => {
-        requestAnimationFrame(resolve);
-    });
+    await new Promise(resolve => requestAnimationFrame(resolve));
 
     const sets = generateSets();
 
     renderResultList(sets);
+    saveResultSets(sets);
 
     regenerateButton.classList.remove("hidden");
 
     hideLoading();
 }
 
-
 async function regenerateAction() {
     showLoading();
 
-    await new Promise(resolve => {
-        requestAnimationFrame(resolve);
-    });
+    await new Promise(resolve => requestAnimationFrame(resolve));
 
     const sets = regenerateSets();
 
     renderResultList(sets);
+    saveResultSets(sets);
 
     hideLoading();
 }
-
-
-/* ==========================================
-   Result List
-========================================== */
 
 function renderResultList(resultSets) {
     resultList.innerHTML = "";
@@ -326,35 +242,23 @@ function renderResultList(resultSets) {
                 条件を満たすセットを作成できませんでした
             </div>
         `;
-
         return;
     }
 
     resultSets.forEach((set, index) => {
-        resultList.appendChild(
-            createResultCard(set, index + 1)
-        );
+        resultList.appendChild(createResultCard(set, index + 1));
     });
 
-    document
-        .querySelectorAll(".share-button")
-        .forEach(button => {
-            button.onclick = () => {
-                const index = Number(button.dataset.index);
-
-                shareSet(resultSets[index]);
-            };
-        });
+    document.querySelectorAll(".share-button").forEach(button => {
+        button.onclick = () => {
+            const index = Number(button.dataset.index);
+            shareSet(resultSets[index]);
+        };
+    });
 }
-
-
-/* ==========================================
-   Result Card
-========================================== */
 
 function createResultCard(set, number) {
     const card = document.createElement("div");
-
     card.className = "result-card";
 
     let html = `
@@ -375,17 +279,9 @@ function createResultCard(set, number) {
                 </div>
 
                 <div class="result-content">
-                    <div class="result-title">
-                        ${escapeHtml(video.title)}
-                    </div>
-
-                    <div class="result-channel">
-                        ${escapeHtml(video.channel)}
-                    </div>
-
-                    <div class="result-duration">
-                        ${video.duration}
-                    </div>
+                    <div class="result-title">${escapeHtml(video.title)}</div>
+                    <div class="result-channel">${escapeHtml(video.channel)}</div>
+                    <div class="result-duration">${video.duration}</div>
 
                     <a
                         class="result-link"
@@ -419,30 +315,13 @@ function createResultCard(set, number) {
     return card;
 }
 
-
-/* ==========================================
-   Loading
-========================================== */
-
 function showLoading() {
-    document
-        .getElementById("loadingOverlay")
-        .classList
-        .remove("hidden");
+    document.getElementById("loadingOverlay").classList.remove("hidden");
 }
-
 
 function hideLoading() {
-    document
-        .getElementById("loadingOverlay")
-        .classList
-        .add("hidden");
+    document.getElementById("loadingOverlay").classList.add("hidden");
 }
-
-
-/* ==========================================
-   Escape
-========================================== */
 
 function escapeHtml(text) {
     return String(text)
