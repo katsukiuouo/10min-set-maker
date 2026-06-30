@@ -24,7 +24,6 @@ let currentSearchVideos = [];
 renderCandidateList();
 
 const savedSets = loadResultSets();
-
 if (savedSets.length > 0) {
     renderResultList(savedSets);
 }
@@ -120,6 +119,14 @@ function renderSearchResults(videos) {
         return;
     }
 
+    const addSelectedButton = document.createElement("button");
+    addSelectedButton.type = "button";
+    addSelectedButton.className = "search-add-selected";
+    addSelectedButton.textContent = "選択した動画を追加";
+    addSelectedButton.onclick = addSelectedSearchVideos;
+
+    searchResults.appendChild(addSelectedButton);
+
     videos.forEach((v, index) => {
         const card = document.createElement("div");
         card.className = "search-item";
@@ -154,20 +161,10 @@ function renderSearchResults(videos) {
         card.querySelector(".single-add-button").onclick = () => {
             addVideo(v);
             renderCandidateList();
-            closeSearchResults();
         };
 
         searchResults.appendChild(card);
     });
-
-    const addSelectedButton = document.createElement("button");
-    addSelectedButton.type = "button";
-    addSelectedButton.className = "search-add-selected";
-    addSelectedButton.textContent = "選択した動画を追加";
-
-    addSelectedButton.onclick = addSelectedSearchVideos;
-
-    searchResults.appendChild(addSelectedButton);
 }
 
 function addSelectedSearchVideos() {
@@ -199,7 +196,6 @@ function closeSearchResults() {
 
 function renderCandidateList() {
     const videos = getAllVideos();
-
     candidateList.innerHTML = "";
 
     if (videos.length === 0) {
