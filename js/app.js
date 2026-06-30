@@ -24,6 +24,7 @@ let currentSearchVideos = [];
 renderCandidateList();
 
 const savedSets = loadResultSets();
+
 if (savedSets.length > 0) {
     renderResultList(savedSets);
 }
@@ -132,6 +133,12 @@ function renderSearchResults(videos) {
         card.className = "search-item";
 
         card.innerHTML = `
+            <input
+                type="checkbox"
+                class="search-select"
+                data-index="${index}"
+            >
+
             <div class="search-thumbnail">
                 <img src="${v.thumbnail}" alt="thumbnail">
             </div>
@@ -143,25 +150,8 @@ function renderSearchResults(videos) {
                     <span class="search-channel">${escapeHtml(v.channel)}</span>
                     <span class="search-duration">${v.duration}</span>
                 </div>
-
-                <div class="search-bottom">
-                    <input
-                        type="checkbox"
-                        class="search-select"
-                        data-index="${index}"
-                    >
-
-                    <button type="button" class="single-add-button">
-                        追加
-                    </button>
-                </div>
             </div>
         `;
-
-        card.querySelector(".single-add-button").onclick = () => {
-            addVideo(v);
-            renderCandidateList();
-        };
 
         searchResults.appendChild(card);
     });
