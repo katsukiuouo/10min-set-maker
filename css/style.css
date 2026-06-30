@@ -1075,3 +1075,142 @@ Scrollbar
     background:rgba(120,180,180,.55);
 
 }
+
+/* ======================================================
+   Mobile usability fix
+====================================================== */
+
+@media (max-width: 700px) {
+  .container {
+    width: 100%;
+    padding: 0 12px 56px;
+  }
+
+  .hero {
+    padding: 20px 12px 18px;
+  }
+
+  .hero-inner {
+    padding: 26px 18px;
+    border-radius: 24px;
+  }
+
+  .hero h1 {
+    font-size: 1.65rem;
+  }
+
+  .hero p {
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .glass-card {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .tab-buttons {
+    gap: 8px;
+  }
+
+  .tab-button,
+  .search-row button,
+  .url-row button,
+  .candidate-buttons button,
+  #regenerateButton {
+    min-height: 46px;
+    font-size: 0.95rem;
+  }
+
+  .search-row input,
+  .url-row input {
+    min-height: 48px;
+    font-size: 16px;
+  }
+
+  .search-item,
+  .candidate-item,
+  .result-video {
+    gap: 10px;
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .search-thumbnail,
+  .candidate-thumbnail,
+  .result-thumbnail {
+    width: 38%;
+  }
+
+  .search-thumbnail img,
+  .candidate-thumbnail img,
+  .result-thumbnail img {
+    border-radius: 12px;
+  }
+
+  .search-title,
+  .candidate-title,
+  .result-title {
+    font-size: 0.9rem;
+    line-height: 1.35;
+    -webkit-line-clamp: 2;
+  }
+
+  .search-channel,
+  .candidate-channel,
+  .result-channel,
+  .search-duration,
+  .candidate-duration,
+  .result-duration {
+    font-size: 0.78rem;
+  }
+
+  .candidate-check {
+    width: 26px;
+    height: 26px;
+  }
+
+  .delete-button {
+    font-size: 1.35rem;
+    padding: 2px 8px;
+  }
+
+  .generate-area {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+    margin: 20px -12px 24px;
+    padding: 12px;
+    background: rgba(232, 251, 248, 0.75);
+    backdrop-filter: blur(12px);
+  }
+
+  .generate-button {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 1rem;
+  }
+
+  .result-header {
+    padding: 16px;
+  }
+
+  .result-time {
+    font-size: 1.05rem;
+  }
+
+  .result-link {
+    padding: 8px 12px;
+    font-size: 0.82rem;
+  }
+
+  .result-footer {
+    padding: 14px;
+  }
+
+  .share-button {
+    width: 100%;
+    min-height: 46px;
+  }
+}
