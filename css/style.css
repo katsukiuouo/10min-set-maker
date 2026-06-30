@@ -729,3 +729,34 @@ footer {
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(120,180,180,.55);
 }
+
+.search-select {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.search-bottom {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-add-selected {
+    margin-top: 18px;
+    width: 100%;
+    min-height: 48px;
+    border: none;
+    border-radius: 16px;
+    background: var(--primary);
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.search-add-selected:hover {
+    background: var(--primary-dark);
+}
