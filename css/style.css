@@ -1,7 +1,3 @@
-/* ======================================================
-   Base
-====================================================== */
-
 * {
     margin: 0;
     padding: 0;
@@ -13,7 +9,11 @@ html {
 }
 
 body {
-    font-family: var(--font-main);
+    font-family:
+        "Hiragino Maru Gothic ProN",
+        "Yu Gothic",
+        "Hiragino Sans",
+        sans-serif;
     background: linear-gradient(
         180deg,
         var(--background-top),
@@ -23,21 +23,11 @@ body {
     min-height: 100vh;
 }
 
-
-/* ======================================================
-   Container
-====================================================== */
-
 .container {
     width: min(1100px, 92%);
     margin: auto;
     padding-bottom: 80px;
 }
-
-
-/* ======================================================
-   Hero
-====================================================== */
 
 .hero {
     padding: 60px 20px 40px;
@@ -63,6 +53,8 @@ body {
     font-size: clamp(2rem, 5vw, 3.2rem);
     margin-bottom: 18px;
     font-weight: 700;
+    letter-spacing: .04em;
+    color: #4f6966;
 }
 
 .hero p {
@@ -70,11 +62,6 @@ body {
     color: var(--sub-text);
     line-height: 1.8;
 }
-
-
-/* ======================================================
-   Glass Card
-====================================================== */
 
 .glass-card {
     margin-top: 28px;
@@ -86,27 +73,29 @@ body {
     padding: 24px;
 }
 
-
-/* ======================================================
-   Section
-====================================================== */
-
 .section-header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    gap: 16px;
     margin-bottom: 22px;
 }
 
-.section-header h2,
-.glass-card h2 {
-    font-size: var(--h2-size);
+.section-title {
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: .03em;
+    color: #4f6966;
+    margin-bottom: 18px;
+    line-height: 1.4;
 }
 
-
-/* ======================================================
-   Tab
-====================================================== */
+.section-header .section-title {
+    margin-bottom: 0;
+}
 
 .tab-buttons {
     display: flex;
@@ -128,11 +117,6 @@ body {
     background: var(--primary);
     color: white;
 }
-
-
-/* ======================================================
-   Input
-====================================================== */
 
 .search-row,
 .url-row {
@@ -159,8 +143,7 @@ body {
 
 .search-row button,
 .url-row button,
-.candidate-buttons button,
-#regenerateButton {
+.candidate-buttons button {
     border: none;
     border-radius: 16px;
     padding: 0 22px;
@@ -172,15 +155,9 @@ body {
 
 .search-row button:hover,
 .url-row button:hover,
-.candidate-buttons button:hover,
-#regenerateButton:hover {
+.candidate-buttons button:hover {
     background: var(--primary-dark);
 }
-
-
-/* ======================================================
-   Search Results
-====================================================== */
 
 #searchResults {
     margin-top: 24px;
@@ -189,14 +166,37 @@ body {
     gap: 18px;
 }
 
+.search-add-selected {
+    width: 100%;
+    min-height: 48px;
+    border: none;
+    border-radius: 16px;
+    background: var(--primary);
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.search-add-selected:hover {
+    background: var(--primary-dark);
+}
+
 .search-item {
     display: flex;
-    gap: 16px;
+    gap: 12px;
+    align-items: center;
     padding: 16px;
     border-radius: 20px;
     background: rgba(255,255,255,.42);
     backdrop-filter: blur(16px);
     border: 1px solid rgba(255,255,255,.55);
+}
+
+.search-select {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    flex-shrink: 0;
 }
 
 .search-thumbnail {
@@ -228,11 +228,6 @@ body {
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
-
-
-/* ======================================================
-   Candidate List
-====================================================== */
 
 #candidateList {
     display: flex;
@@ -302,11 +297,6 @@ body {
     padding: 6px;
 }
 
-
-/* ======================================================
-   Meta 2-line Layout
-====================================================== */
-
 .search-meta,
 .candidate-meta,
 .result-meta {
@@ -333,11 +323,6 @@ body {
     flex-shrink: 0;
 }
 
-
-/* ======================================================
-   Generate
-====================================================== */
-
 .generate-area {
     display: flex;
     justify-content: center;
@@ -359,11 +344,6 @@ body {
     box-shadow: var(--shadow);
 }
 
-
-/* ======================================================
-   Result
-====================================================== */
-
 #resultList {
     display: flex;
     flex-direction: column;
@@ -381,7 +361,7 @@ body {
 
 .result-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 20px 22px;
     border-bottom: 1px solid rgba(255,255,255,.45);
@@ -390,6 +370,7 @@ body {
 .result-time {
     font-size: 1.2rem;
     font-weight: 700;
+    color: #4f6966;
 }
 
 .result-video-list {
@@ -456,7 +437,7 @@ body {
     padding: 20px;
     border-top: 1px solid rgba(255,255,255,.35);
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
 }
 
 .share-button {
@@ -473,11 +454,6 @@ body {
     opacity: .9;
 }
 
-
-/* ======================================================
-   Empty / Hidden
-====================================================== */
-
 .empty {
     padding: 50px 20px;
     text-align: center;
@@ -488,19 +464,9 @@ body {
     display: none !important;
 }
 
-
-/* ======================================================
-   Footer
-====================================================== */
-
 footer {
     display: none;
 }
-
-
-/* ======================================================
-   Mobile
-====================================================== */
 
 @media (max-width: 700px) {
     .container {
@@ -533,9 +499,11 @@ footer {
         border-radius: 20px;
     }
 
+    .section-title {
+        font-size: 1.25rem;
+    }
+
     .section-header {
-        flex-direction: column;
-        align-items: flex-start;
         gap: 14px;
     }
 
@@ -556,8 +524,7 @@ footer {
     .tab-button,
     .search-row button,
     .url-row button,
-    .candidate-buttons button,
-    #regenerateButton {
+    .candidate-buttons button {
         min-height: 46px;
         font-size: 0.95rem;
     }
@@ -585,6 +552,11 @@ footer {
         gap: 10px;
         padding: 12px;
         border-radius: 18px;
+    }
+
+    .search-select {
+        width: 24px;
+        height: 24px;
     }
 
     .search-thumbnail,
@@ -619,17 +591,6 @@ footer {
     .result-meta {
         font-size: 0.78rem;
         margin-top: 5px;
-    }
-
-    .search-content button {
-        margin-top: 8px;
-        align-self: flex-end;
-        padding: 8px 16px;
-        border-radius: 12px;
-        font-size: 0.85rem;
-        border: none;
-        background: var(--primary);
-        color: white;
     }
 
     .candidate-bottom {
@@ -692,11 +653,6 @@ footer {
     }
 }
 
-
-/* ======================================================
-   Desktop
-====================================================== */
-
 @media (min-width: 701px) {
     .container {
         padding-left: 10px;
@@ -707,11 +663,6 @@ footer {
         padding: 28px;
     }
 }
-
-
-/* ======================================================
-   Scrollbar
-====================================================== */
 
 ::-webkit-scrollbar {
     width: 10px;
@@ -728,35 +679,4 @@ footer {
 
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(120,180,180,.55);
-}
-
-.search-select {
-    width: 22px;
-    height: 22px;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-
-.search-bottom {
-    margin-top: auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-}
-
-.search-add-selected {
-    margin-top: 18px;
-    width: 100%;
-    min-height: 48px;
-    border: none;
-    border-radius: 16px;
-    background: var(--primary);
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-.search-add-selected:hover {
-    background: var(--primary-dark);
 }
