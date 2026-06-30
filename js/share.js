@@ -54,7 +54,7 @@ function createShareUrl(id) {
 ========================================== */
 
 function openXShare(url) {
-    const text = "再生リストに挟む10分セットを作りました！";
+    const text = "#BandZAI10分セット";
 
     const shareUrl =
         "https://twitter.com/intent/tweet?" +
