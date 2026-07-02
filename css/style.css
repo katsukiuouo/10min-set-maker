@@ -680,3 +680,19 @@ footer {
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(120,180,180,.55);
 }
+
+.footer-links{
+    text-align:center;
+    margin:40px 0;
+    font-size:.9rem;
+    color:var(--sub-text);
+}
+
+.footer-links a{
+    color:var(--sub-text);
+    text-decoration:none;
+}
+
+.footer-links a:hover{
+    text-decoration:underline;
+}
